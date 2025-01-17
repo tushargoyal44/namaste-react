@@ -1,27 +1,42 @@
 import data from "../data/data.json";
 import RestaurantCard  from "./RestaurantCard";
 import {useEffect, useState} from "react";
+import { API } from "../utils/constants";
+import Shimmer from "./Shimmer";
 
 
-const Body = () => {
-    let [restData, setRestData] = useState(data);
+const Body = () => {    
+    const [restData, setRestData] = useState([]);
+    const [searchText, setSearchText] = useState([]);
+    
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    const fetchData = () => {
-        fetch('https://www.swiggy.com/dapi/restaurants/list/v5?lat=19.0748&lng=72.8856&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING', {
-            mode: 'no-cors'
-        }).then(res => console.log(res)
-        );
-
+    const fetchData = async () => {
+    const response =  await fetch(API);
+  
+    const json = await response.json();
+    setRestData(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
     }
+
+    if(restData.length === 0){
+       return <Shimmer />   
+    }
+
     return (
         <div className="body">
             <div className="filter">
+             <div className="search">
+             <input type="text" value={searchText} placeholder="search" onChange={(e) => {setSearchText(e.target.value)}} />
+             <button onClick={() => {
+                const filterData = restData.filter((e) => e.info.name.includes(searchText));
+                setRestData(filterData);
+             }}>search</button>
+             </div>
              <button className="filter-button" onClick={() => {
-                 setRestData(restData.filter(res => res.info.avgRating > 4.0));
+                 setRestData(restData.filter(res => res.info.avgRating > 4.4));
              }}>Top Rated Restaurants</button>
             </div>
             <div className="res-container">
@@ -30,5 +45,4 @@ const Body = () => {
         </div>
     )
 }
-
 export default Body;
