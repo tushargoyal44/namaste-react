@@ -9,8 +9,7 @@ export const Header = () => {
     };
     return (
         <div className="header">
-             {console.log("Hello World")}
-             {console.log("Hello World")}
+           
             <div className="logo-container">
                 <img className="logo" src={LOGO_URL} alt="Logo" />
             </div>

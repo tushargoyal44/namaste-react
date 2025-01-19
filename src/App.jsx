@@ -5,10 +5,8 @@ import './App.css'
 import data from './data/data.json'
 import Header from './components/Header'
 import Body from './components/Body'
+import { createBrowserRouter } from 'react-router-dom'
 
-const Footer = () => {
-
-}
 
 const App = () => {
     return (
